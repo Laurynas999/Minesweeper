@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>MineSweeper</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<style>
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(13,30px) ;
+  grid-template-rows: repeat(3,30px) ;
+  width: 50%;
+  padding: 5px;
+}
+
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  font-size: 10px;
+  text-align: center;
+  grid-gap: 0px;
+  transition-duration: 0.4s;
+}
+
+.grid-item2 {
+  background-color: #556B2F;
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  font-size: 10px;
+  text-align: center;
+  grid-gap: 0px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+
+}
+
+.grid-item2:hover {
+	cursor: pointer;
+	background-color: #505B2F;
+}
+.grid-item:hover{
+  background-color: #f44336;
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.dropdown-content{
+
+	position: center ;
+  	
+ 	width: 184px;
+ 	
+	background-color: #F0FFFF;
+ 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+ 	text-align: center;
+	grid-gap: 2px;
+	cursor: pointer;
+	grid-template-columns: repeat(3,60px) ;
+	grid-template-rows: repeat(3,60px) ;
+	border: 6px solid black;
+
+}
+
+
+
+</style>
+
+<body>
+
+	<div class="grid-container" id="grid-cont" >
+
+	 	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_1">?</button>
+	  	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_2">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_3">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_4">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_5">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_6">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_7">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_8">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_9">?</button>
+	 	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_10">?</button>
+	  	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_11">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_12">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_13">?</button>
+
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_1">?</button>
+	  	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_2">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_3">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_4">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_5">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_6">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_7">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_8">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_9">?</button>
+	 	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_10">?</button>
+	  	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_11">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_12">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_13">?</button>
+
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_1">?</button>
+	  	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_2">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_3">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_4">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_5">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_6">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_7">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_8">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_9">?</button>
+	 	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_10">?</button>
+	  	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_11">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_12">?</button>
+		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_13">?</button>
+
+	</div>
+
+	<div class="dropdown-content" style="display:none;" >
+   		<button onclick="pasirinkimas(id)" id="1" class="grid-item2">1</button>
+    	<button onclick="pasirinkimas(id)" id="2" class="grid-item2">2</button>
+    	<button onclick="pasirinkimas(id)" id="3" class="grid-item2">3</button>
+    	<button onclick="pasirinkimas(id)" id="4" class="grid-item2">4</button>
+    	<button onclick="pasirinkimas(id)" id="5" class="grid-item2">5</button>
+    	<button onclick="pasirinkimas(id)" id="6" class="grid-item2">6</button>
+    	<button onclick="pasirinkimas(id)" id="7" class="grid-item2">7</button>
+    	<button onclick="pasirinkimas(id)" id="💣" class="grid-item2">💣</button>
+    	<button onclick="pasirinkimas(id)" id="🍀" class="grid-item2">🍀</button>
+  	</div>
+
+	<script>
+
+			const langeliai = [];
+			var pasirinktas_langelis = null;
+			
+			let count = 0;
+			let count_remaining = 0;
+			let bomb_num = 10;
+
+			let pasirinkimo_taisymas;
+
+			let pagrindinis_langelis_id;
+			let pagrindinis_langelis_value;
+
+			let antrinis_lengelis_id;
+			let antrinis_lengelis_value;
+				
+			function updateButton(pasirinkto_langelio_verte,pasirinkto_langelio_id) {   //uzfiksuoja kuris langelis pasirinktas i var pasirinktas_langelis ir iskviecia pasirinkimus
+
+				pagrindinis_langelis_id = pasirinkto_langelio_id;
+				pagrindinis_langelis_value = pasirinkto_langelio_verte;
+
+
+				pasirinkimo_taisymas = pagrindinis_langelis_value != "?" && ((document.getElementById(pagrindinis_langelis_id).innerHTML).split('%').length)<2 ? true :false ;
+
+
+				document.getElementsByClassName("dropdown-content")[0].style.display = "inline-grid";
+				
+			}
+
+			function pasirinkimas(pasirinkta_verte){//pakeicia pasirinkto langelio isvaizda ir verte. po to uzdaro pasirinkimu langa
+
+				antrinis_lengelis_id = pasirinkta_verte;
+				antrinis_lengelis_value = pasirinkta_verte;
+
+				if (pagrindinis_langelis_value == "?") {
+
+					if (antrinis_lengelis_id == "💣") {
+
+						bomb_num--;
+						count_remaining--;
+
+					}else {
+
+						count_remaining--;
+
+					}
+
+				}else if (pagrindinis_langelis_value == "💣"){
+
+					if (antrinis_lengelis_id != "💣") {
+
+						bomb_num++;
+
+					}
+
+				}else {
+					
+					if (antrinis_lengelis_id == "💣"){
+
+						bomb_num--;
+
+					}
+				}
+
+				document.getElementById(pagrindinis_langelis_id).innerHTML = antrinis_lengelis_id;
+				document.getElementById(pagrindinis_langelis_id).value = antrinis_lengelis_id;
+
+				document.getElementsByClassName("dropdown-content")[0].style.display = "none";
+
+				kaimynai ();
+
+				procentai_total();
+								
+			}
+
+			//Sukonstruoja pasirinkto langelio kaimynus ir apskaiciuoja bombos tikimybes pagal pasirinkta skaiciu
+
+			function kaimynai (){
+
+				let koordinate = pagrindinis_langelis_id.split("_",2);
+				//let aplinkiniai;
+
+				let raide = koordinate[0];
+				let skaicius = koordinate[1];
+
+				let raides_eles_numeris = 0;
+
+				for (i=0; raide != items[i]; i++){
+
+					raides_eles_numeris++;
+
+				}
+	
+				let raidziu_masyvas = aplinkines_raides(raides_eles_numeris).split(",",3)
+
+				let skaiciu_masyvas = aplinkiniai_skaiciai(skaicius).split(",",3);
+
+				let aplinkines_koordinates = koords(raidziu_masyvas, skaiciu_masyvas);
+
+				tikimybes(aplinkines_koordinates);
+
+			}
+//Randa kaimynines raides
+			function aplinkines_raides (raides_eil_nr_fn_kaimynai){ //atrenka aplinkines pasirinkto laukelio raides
+
+				if (raides_eil_nr_fn_kaimynai > 0 && raides_eil_nr_fn_kaimynai < (items.length-1)) {
+
+					return (items[raides_eil_nr_fn_kaimynai-1] + "," + items[raides_eil_nr_fn_kaimynai] + "," + items[raides_eil_nr_fn_kaimynai+1]);
+
+				}if (raides_eil_nr_fn_kaimynai == 0 ) {
+
+					return (items[raides_eil_nr_fn_kaimynai] + "," + items[raides_eil_nr_fn_kaimynai+1]);
+
+				}if (raides_eil_nr_fn_kaimynai > 0 && raides_eil_nr_fn_kaimynai == (items.length-1)) {
+
+					return (items[raides_eil_nr_fn_kaimynai-1] + "," + items[raides_eil_nr_fn_kaimynai]);
+				}
+			}
+//Randa kaimynius skaicius
+			function aplinkiniai_skaiciai (skaicius_fn_kaimynai){
+
+				if (skaicius_fn_kaimynai>1 && skaicius_fn_kaimynai < 13){
+
+					return ((skaicius_fn_kaimynai-1+",") + skaicius_fn_kaimynai + ("," + (skaicius_fn_kaimynai+++1)));
+
+				}if (skaicius_fn_kaimynai == 1){
+
+					return (skaicius_fn_kaimynai + "," + (skaicius_fn_kaimynai +++ 1));
+
+				}if (skaicius_fn_kaimynai == 13){
+
+					return ((skaicius_fn_kaimynai-1) + "," + skaicius_fn_kaimynai);
+				}
+
+			}
+//Galimu kaimyniniu koordinaciu masyvo generatorius
+//Atmeta negalimus langelius ir pasirinkta langeli
+			function koords (raide, skaicius){
+
+				let aplink_koords = [];
+
+				for (i=0; i<3; i++){
+
+					for (y=0; y<3; y++){
+					
+						if(typeof raide[i] !== "undefined" && typeof skaicius[y] !== "undefined" && pagrindinis_langelis_id !== (raide[i] + "_" + skaicius[y])){
+
+							aplink_koords.push(raide[i] + "_" + skaicius[y]);
+						}
+
+					}
+				}
+
+				return aplink_koords;
+
+			}
+
+			function tikimybes (aplinkines_koordinates_fn_kaimynai){
+
+//tikrina 
+//1 ar pasirinkto langelio verte nera didesne uz kaimyniniu langeliu skaiciu 
+//2 ar pasirinktas elementas yra skaicius / ar simbolis
+
+				let nezinomi_kaimyniniai_langeliai_var = nezinomi_langeliai(aplinkines_koordinates_fn_kaimynai);
+
+				//console.log(nezinomi_kaimyniniai_langeliai_var.length+"nez");
+
+				if (antrinis_lengelis_value <= aplinkines_koordinates_fn_kaimynai.length && !isNaN(parseInt(antrinis_lengelis_value))){
+
+					bombs_present = 0;
+
+					for (i = 0; i < aplinkines_koordinates_fn_kaimynai.length; i++) {
+
+						//console.log("foras eina");
+						
+						if(document.getElementById(aplinkines_koordinates_fn_kaimynai[i]).value == "💣"){
+
+							bombs_present++;
+						}
+					}
+
+					var pasirinkimo_tikimybe = probability (bombs_present,nezinomi_kaimyniniai_langeliai_var.length);
+
+					//console.log("bombs present around "+bombs_present);
+
+					filling(pasirinkimo_tikimybe, aplinkines_koordinates_fn_kaimynai);
+
+				}else if (antrinis_lengelis_value == "💣" || antrinis_lengelis_value == "🍀"){
+
+					return;
+
+				}else {
+
+					console.log("Skaicius netinkamas");
+
+				}
+
+			}
+//Surenka kaimyninius langelius su nezinomo langelio vertemis
+			function nezinomi_langeliai (aplinkines_koordinates_fn_tikimybes){
+
+				let nezinomos_vertes_langeliai = [];
+
+
+				for(i=0; i< aplinkines_koordinates_fn_tikimybes.length; i++){
+
+					let aplinkines_koordinates_value = document.getElementById(aplinkines_koordinates_fn_tikimybes[i]).value;
+
+					if (aplinkines_koordinates_value != "💣" && aplinkines_koordinates_value != "🍀"){
+
+						nezinomos_vertes_langeliai.push(aplinkines_koordinates_fn_tikimybes[i]);
+
+					}
+
+				}
+
+				return nezinomos_vertes_langeliai;
+
+			}
+
+			function probability (esancios_bombos, laisvi_langeliai){
+
+				let rezultatas = (((antrinis_lengelis_value-esancios_bombos)/laisvi_langeliai)*100);
+
+
+				if(rezultatas <= 100 && rezultatas >= 0){
+
+					return rezultatas;
+
+				}else{
+
+					console.log("Klaida tikimybes skaiciavime");
+
+				}
+
+				
+			}
+
+			function filling (tikimybe, koordinates){
+
+				for (i = 0; i < koordinates.length; i++) {
+
+					//console.log(pasirinkimo_taisymas);
+
+					let kaimynas_val = document.getElementById(koordinates[i]).value;
+					let kaimynas_html = document.getElementById(koordinates[i]).innerHTML;
+
+
+					
+
+					//jei tikimybes aplink pasirinkta langeli skaiciuoja pirma karta
+					/*if (!pasirinkimo_taisymas){  
+
+						if(kaimynas_val == "?"){
+
+							document.getElementById(koordinates[i]).value = tikimybe;
+							document.getElementById(koordinates[i]).innerHTML = Math.round(tikimybe) + "%";
+						}else if (kaimynas_html.split('%').length==2){
+
+							console.log("Uzeita ant % langelio");
+
+							let bendros_tikimybes = (tikimybe * kaimynas_val)/100;
+
+							document.getElementById(koordinates[i]).value = bendros_tikimybes;
+							document.getElementById(koordinates[i]).innerHTML = Math.round(bendros_tikimybes) + "%";
+
+						}
+
+					}else if (pasirinkimo_taisymas){
+
+						//pakeicia tikimybes aplinkiniu langeliu, jei pries tai buvo pasirinktas ne tas simbolis
+
+						document.getElementById(koordinates[i]).value = tikimybe;
+						document.getElementById(koordinates[i]).innerHTML = Math.round(tikimybe) + "%";
+
+					}else{
+
+						console.log("Klaida fn filling");				
+
+					}*/
+				}
+			}
+
+			function procentai_total(){
+
+				let tmp = (Math.round((bomb_num/count_remaining)*100));
+
+				for (let p=0; p<count; p++){
+
+					if (document.getElementById(langeliai[p]).value == "?") {
+
+						document.getElementById(langeliai[p]).innerHTML = tmp + "%";
+
+					}/*else {
+						count_remaining--;
+					}*/
+				}//console.log(count_remaining);
+
+			}
+
+			let items = ['A','B','C'];
+
+			for (let i = 0; i < items.length; i++){  
+
+				for (let y = 1; y < 14; y++){
+
+					langeliai.push(items[i] + "_" + y);
+
+					count++;
+					
+				}
+				count_remaining = count;
+			}
+			//console.log(count_remaining);
+			procentai_total();
+				
+	</script>
+
+</body>
+</html>
