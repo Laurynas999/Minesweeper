@@ -71,7 +71,7 @@
 	<div class="grid-container" id="grid-cont" >
 
 	 	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_1">?</button>
-	  	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_2">?</button>
+	  <button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_2">?</button>
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_3">?</button>
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_4">?</button>
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_5">?</button>
@@ -80,12 +80,12 @@
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_8">?</button>
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_9">?</button>
 	 	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_10">?</button>
-	  	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_11">?</button>
+	  <button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_11">?</button>
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_12">?</button>
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="A_13">?</button>
 
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_1">?</button>
-	  	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_2">?</button>
+	  <button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_2">?</button>
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_3">?</button>
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_4">?</button>
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_5">?</button>
@@ -94,12 +94,12 @@
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_8">?</button>
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_9">?</button>
 	 	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_10">?</button>
-	  	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_11">?</button>
+	  <button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_11">?</button>
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_12">?</button>
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="B_13">?</button>
 
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_1">?</button>
-	  	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_2">?</button>
+	  <button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_2">?</button>
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_3">?</button>
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_4">?</button>
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_5">?</button>
@@ -108,7 +108,7 @@
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_8">?</button>
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_9">?</button>
 	 	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_10">?</button>
-	  	<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_11">?</button>
+	  <button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_11">?</button>
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_12">?</button>
 		<button onclick="updateButton(value,id)" value="?" class="grid-item" id="C_13">?</button>
 
@@ -129,7 +129,7 @@
 	<script>
 
 			const langeliai = [];
-			var pasirinktas_langelis = null;
+			var pagrindinis_langelis_backup;
 			
 			let count = 0;
 			let count_remaining = 0;
@@ -147,6 +147,10 @@
 
 				pagrindinis_langelis_id = pasirinkto_langelio_id;
 				pagrindinis_langelis_value = pasirinkto_langelio_verte;
+
+				pagrindinis_langelis_backup = pasirinkto_langelio_verte;
+				pagrindinis_langelis_backup_html = document.getElementById(pasirinkto_langelio_id).innerHTML;
+
 
 
 				pasirinkimo_taisymas = pagrindinis_langelis_value != "?" && ((document.getElementById(pagrindinis_langelis_id).innerHTML).split('%').length)<2 ? true :false ;
@@ -310,7 +314,7 @@
 
 					var pasirinkimo_tikimybe = probability (bombs_present,nezinomi_kaimyniniai_langeliai_var.length);
 
-					//console.log("bombs present around "+bombs_present);
+					//console.log("pasirinkimo_tikimybe "+pasirinkimo_tikimybe);
 
 					filling(pasirinkimo_tikimybe, aplinkines_koordinates_fn_kaimynai);
 
@@ -333,15 +337,20 @@
 
 				for(i=0; i< aplinkines_koordinates_fn_tikimybes.length; i++){
 
-					let aplinkines_koordinates_value = document.getElementById(aplinkines_koordinates_fn_tikimybes[i]).value;
+					let aplinkines_koordinates_html = document.getElementById(aplinkines_koordinates_fn_tikimybes[i]).innerHTML;
+					let aplinkines_koordinates_html_split_len = aplinkines_koordinates_html.split('%').length;
 
-					if (aplinkines_koordinates_value != "💣" && aplinkines_koordinates_value != "🍀"){
+					// ne_tikimybes_skaicius grazina 1 jei kaimyniniame langelyje yra ne % reiksme ir 2 jei ji yra
+					let ne_tikimybes_skaicius = (aplinkines_koordinates_html + "+" + aplinkines_koordinates_html_split_len).split('%').length; 
+					
+					if (aplinkines_koordinates_html != "💣" && aplinkines_koordinates_html != "🍀" && ne_tikimybes_skaicius == 2){
 
 						nezinomos_vertes_langeliai.push(aplinkines_koordinates_fn_tikimybes[i]);
 
 					}
 
 				}
+				console.log("nezinomos_vertes_langeliai "+ nezinomos_vertes_langeliai);
 
 				return nezinomos_vertes_langeliai;
 
@@ -374,28 +383,40 @@
 					let kaimynas_val = document.getElementById(koordinates[i]).value;
 					let kaimynas_html = document.getElementById(koordinates[i]).innerHTML;
 
+					if(tikimybe == undefined){
 
-					
+						document.getElementById(pagrindinis_langelis_id).value = pagrindinis_langelis_backup;
+						document.getElementById(pagrindinis_langelis_id).innerHTML = pagrindinis_langelis_backup_html;
 
-					//jei tikimybes aplink pasirinkta langeli skaiciuoja pirma karta
-					/*if (!pasirinkimo_taisymas){  
+						console.log("Pasirinktas netinkamas skaicius. Skaiciavimai nepriimti");
 
-						if(kaimynas_val == "?"){
+						return;
 
-							document.getElementById(koordinates[i]).value = tikimybe;
-							document.getElementById(koordinates[i]).innerHTML = Math.round(tikimybe) + "%";
-						}else if (kaimynas_html.split('%').length==2){
+					}else if(kaimynas_val == "?"){
 
-							console.log("Uzeita ant % langelio");
+						document.getElementById(koordinates[i]).value = tikimybe;
+						document.getElementById(koordinates[i]).innerHTML = Math.round(tikimybe) + "%";
 
-							let bendros_tikimybes = (tikimybe * kaimynas_val)/100;
+					}else if(!pasirinkimo_taisymas){
 
-							document.getElementById(koordinates[i]).value = bendros_tikimybes;
-							document.getElementById(koordinates[i]).innerHTML = Math.round(bendros_tikimybes) + "%";
+						if(kaimynas_html.split('%').length==2){
+
+						let bendros_tikimybes = (tikimybe * kaimynas_val)/100;
+
+						document.getElementById(koordinates[i]).value = bendros_tikimybes;
+						document.getElementById(koordinates[i]).innerHTML = Math.round(bendros_tikimybes) + "%";
 
 						}
 
-					}else if (pasirinkimo_taisymas){
+					}else if(pasirinkimo_taisymas){
+
+						console.log ("Taisymas");
+
+					}
+					
+
+					//jei tikimybes aplink pasirinkta langeli skaiciuoja pirma karta
+					/*else if (pasirinkimo_taisymas){
 
 						//pakeicia tikimybes aplinkiniu langeliu, jei pries tai buvo pasirinktas ne tas simbolis
 
