@@ -129,6 +129,7 @@
 	<script>
 
 			const langeliai = [];
+			const langeliai_2 = [[]];
 			var pagrindinis_langelis_backup;
 			
 			let count = 0;
@@ -456,12 +457,14 @@
 
 					langeliai.push(items[i] + "_" + y);
 
+					langeliai_2 [count] = [(items[i] + "_" + y)];
+
 					count++;
 					
 				}
 				count_remaining = count;
 			}
-			//console.log(count_remaining);
+			console.table(langeliai_2);
 			procentai_total();
 				
 	</script>
