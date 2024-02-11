@@ -128,7 +128,7 @@
 
 	<script>
 
-			const langeliai_koords = [];
+			const langeliai_koords = new Array();
 			var pagrindinis_langelis_backup;
 			
 			let count = 0;
@@ -224,81 +224,57 @@
 
 				}*/
 	
-				let arr_y = aplinkines_y(koord_y).split(",",3)
+				//let arr_y = aplinkines_y(koord_y);
 
-				let arr_x = aplinkiniai_x(koord_x).split(",",3);
+				let arr_y = kaimynai_plane(koord_y, items);
+
+					//console.log ("y array "+ arr_y);
+
+				let arr_x = kaimynai_plane(koord_x, columns);
+
+					//console.log ("x array "+ arr_x);
 
 				let aplinkines_koordinates = koords(arr_y, arr_x);
 
 				tikimybes(aplinkines_koordinates);
 
 			}
-//Randa kaimynines raides
-			function aplinkines_y (y){ //atrenka aplinkines pasirinkto laukelio raides
+//Pagal duotos plokstumos koordinate ir maksimalia reiksme, doda tea galimus kaimynus toje plokstumoje
 
-				if (y > 0 && y < (langeliai_koords.length-1)) {
+			function kaimynai_plane (plane, counting){ 
 
-					return (langeliai_koords[y-1] + "," + langeliai_koords[y] + "," + langeliai_koords[y+1]);
+				if (plane > 0 && plane < (counting-1)) {
 
-				}if (y == 0 ) {
+					return [plane - 1, plane, plane +++ 1];
 
-					return (items[y] + "," + items[y+1]);
+				}if (plane == 0 ) {
 
-				}if (y > 0 && y == (langeliai_koords.length-1)) {
+					return [plane, plane +++ 1];
 
-					return (items[y-1] + "," + items[y]);
+				}if (plane > 0 && plane == (counting-1)) {
+
+					return [plane-1, plane];
 				}
 			}
-//Randa kaimynius skaicius
 
-
-
-
-
-
-//taisyti
-
-
-
-
-
-
-
-
-			function aplinkiniai_x (x){
-
-				if (x>0 && x < 12){
-
-					return ((x-1+",") + x + ("," + (x+++1)));
-
-				}if (x == 1){
-
-					return (x + "," + (x +++ 1));
-
-				}if (x == 13){
-
-					return ((x-1) + "," + x);
-				}
-
-			}
 //Galimu kaimyniniu koordinaciu masyvo generatorius
 //Atmeta negalimus langelius ir pasirinkta langeli
-			function koords (raide, skaicius){
+			function koords (y, x){
 
 				let aplink_koords = [];
 
 				for (i=0; i<3; i++){
 
-					for (y=0; y<3; y++){
+					for (j=0; j<3; j++){
 					
-						if(typeof raide[i] !== "undefined" && typeof skaicius[y] !== "undefined" && pagrindinis_langelis_id !== (raide[i] + "_" + skaicius[y])){
+						if(typeof y[i] !== "undefined" && typeof x[j] !== "undefined" && pagrindinis_langelis_id !== (y[i] + "|" + x[j])){
 
-							aplink_koords.push(raide[i] + "_" + skaicius[y]);
+							aplink_koords.push(y[i] + "|" + x[j]);
 						}
 
 					}
 				}
-
+				console.log (aplink_koords);
 				return aplink_koords;
 
 			}
@@ -350,7 +326,7 @@
 				let nezinomos_vertes_langeliai = [];
 
 
-				for(i=0; i< aplinkines_koordinates_fn_tikimybes.length; i++){
+				for(i = 0; i < aplinkines_koordinates_fn_tikimybes.length; i++){
 
 					let aplinkines_koordinates_html = document.getElementById(aplinkines_koordinates_fn_tikimybes[i]).innerHTML;
 					let aplinkines_koordinates_html_split_len = aplinkines_koordinates_html.split('%').length;
@@ -365,7 +341,7 @@
 					}
 
 				}
-				console.log("nezinomos_vertes_langeliai "+ nezinomos_vertes_langeliai);
+				//console.log("nezinomos_vertes_langeliai "+ nezinomos_vertes_langeliai);
 
 				return nezinomos_vertes_langeliai;
 
@@ -450,26 +426,31 @@
 
 				let tmp = (Math.round((bomb_num/count_remaining)*100));
 
-				for (let p=0; p<count; p++){
+				for (let p = 0; p < items; p++){
 
-					if (document.getElementById(langeliai[p]).value == "?") {
+					for (let s = 0; s < 13; s++){
 
-						document.getElementById(langeliai[p]).innerHTML = tmp + "%";
+						if (document.getElementById(langeliai_koords [p] [s]).value == "?") {
 
-					}/*else {
-						count_remaining--;
-					}*/
+							document.getElementById(langeliai_koords [p] [s]).innerHTML = tmp + "%";
+
+						}/*else {
+							count_remaining--;
+						}*/
+
+					}
 				}//console.log(count_remaining);
 
 			}
 
 			let items = 3;
+			let columns = 13;
 
 			for (let height = 0; height < items; height++){  
 
 				langeliai_koords [height] = [];
 
-				for (let length = 1; length < 14; length++){
+				for (let length = 0; length < 13; length++){
 
 					langeliai_koords [height] [length] = height + "|" + length;
 
@@ -478,7 +459,8 @@
 				}
 				count_remaining = count;
 			}
-			console.table(langeliai_koords);
+			//console.table(langeliai_koords);
+			
 			procentai_total();
 				
 	</script>
