@@ -141,7 +141,6 @@
 			let pagrindinis_langelis_value;
 
 			let antrinis_lengelis_id;
-			let antrinis_lengelis_value;
 				
 			function updateButton(pasirinkto_langelio_verte,pasirinkto_langelio_id) {   //uzfiksuoja kuris langelis pasirinktas i var pasirinktas_langelis ir iskviecia pasirinkimus
 
@@ -163,7 +162,6 @@
 			function pasirinkimas(pasirinkta_verte){//pakeicia pasirinkto langelio isvaizda ir verte. po to uzdaro pasirinkimu langa
 
 				antrinis_lengelis_id = pasirinkta_verte;
-				antrinis_lengelis_value = pasirinkta_verte;
 
 				if (pagrindinis_langelis_value == "?") {
 
@@ -216,23 +214,9 @@
 				let koord_y = koordinate[0];
 				let koord_x = koordinate[1];
 
-				/*let raides_eles_numeris = 0;
-
-				for (i=0; koord_xy != langeliai_koords[i]; i++){
-
-					raides_eles_numeris++;
-
-				}*/
-	
-				//let arr_y = aplinkines_y(koord_y);
-
 				let arr_y = kaimynai_plane(koord_y, items);
 
-					//console.log ("y array "+ arr_y);
-
 				let arr_x = kaimynai_plane(koord_x, columns);
-
-					//console.log ("x array "+ arr_x);
 
 				let aplinkines_koordinates = koords(arr_y, arr_x);
 
@@ -274,28 +258,26 @@
 
 					}
 				}
-				console.log (aplink_koords);
+			
 				return aplink_koords;
 
 			}
 
 			function tikimybes (aplinkines_koordinates_fn_kaimynai){
 
-//tikrina 
-//1 ar pasirinkto langelio verte nera didesne uz kaimyniniu langeliu skaiciu 
-//2 ar pasirinktas elementas yra skaicius / ar simbolis
+
 
 				let nezinomi_kaimyniniai_langeliai_var = nezinomi_langeliai(aplinkines_koordinates_fn_kaimynai);
 
-				//console.log(nezinomi_kaimyniniai_langeliai_var.length+"nez");
+				//tikrina 
+				//1 ar pasirinkto antrinio langelio verte nera didesne uz kaimyniniu langeliu skaiciu 
+				//2 ar pasirinktas elementas yra skaicius / ar simbolis
 
-				if (antrinis_lengelis_value <= aplinkines_koordinates_fn_kaimynai.length && !isNaN(parseInt(antrinis_lengelis_value))){
+				if (antrinis_lengelis_id <= aplinkines_koordinates_fn_kaimynai.length && !isNaN(parseInt(antrinis_lengelis_id))){
 
 					bombs_present = 0;
 
 					for (i = 0; i < aplinkines_koordinates_fn_kaimynai.length; i++) {
-
-						//console.log("foras eina");
 						
 						if(document.getElementById(aplinkines_koordinates_fn_kaimynai[i]).value == "💣"){
 
@@ -303,13 +285,12 @@
 						}
 					}
 
-					var pasirinkimo_tikimybe = probability (bombs_present,nezinomi_kaimyniniai_langeliai_var.length);
-
-					//console.log("pasirinkimo_tikimybe "+pasirinkimo_tikimybe);
+					//skaiciuoja tikimybe pagal kaiminysteje esancius neatskleistus langeliuis ir jau esancias bombas
+					var pasirinkimo_tikimybe = probability (bombs_present,nezinomi_kaimyniniai_langeliai_var.length,0,0,0);
 
 					filling(pasirinkimo_tikimybe, aplinkines_koordinates_fn_kaimynai);
 
-				}else if (antrinis_lengelis_value == "💣" || antrinis_lengelis_value == "🍀"){
+				}else if (antrinis_lengelis_id == "💣" || antrinis_lengelis_id == "🍀"){
 
 					return;
 
@@ -341,17 +322,15 @@
 					}
 
 				}
-				//console.log("nezinomos_vertes_langeliai "+ nezinomos_vertes_langeliai);
-
+				
 				return nezinomos_vertes_langeliai;
 
 			}
+//sujungti probability ir reverse_probability
+			function probability (esancios_bombos, laisvi_langeliai, old_percentage, old_selection, new_selection){
 
-			function probability (esancios_bombos, laisvi_langeliai){
-
-				let rezultatas = (((antrinis_lengelis_value-esancios_bombos)/laisvi_langeliai)*100);
-
-
+				let rezultatas = (!pasirinkimo_taisymas) ? (((antrinis_lengelis_id-esancios_bombos)/laisvi_langeliai)*100) : ((old_percentage/old_selection)*new_selection);
+				
 				if(rezultatas <= 100 && rezultatas >= 0){
 
 					return rezultatas;
@@ -360,21 +339,20 @@
 
 					console.log("Klaida tikimybes skaiciavime");
 
-				}
-
-				
+				}		
 			}
 
 			function filling (tikimybe, koordinates){
 
 				for (i = 0; i < koordinates.length; i++) {
 
-					//console.log(pasirinkimo_taisymas);
-
 					let kaimynas_val = document.getElementById(koordinates[i]).value;
 					let kaimynas_html = document.getElementById(koordinates[i]).innerHTML;
 
-					if(tikimybe == undefined){
+					// tikimybe gaunama undefined jei pasirinktas skacius yra didesnis nei galimi aplinkiniai langeliai
+					// esant tokiam atvejui, nutraukia programa
+
+					if(tikimybe == undefined && !pasirinkimo_taisymas){
 
 						document.getElementById(pagrindinis_langelis_id).value = pagrindinis_langelis_backup;
 						document.getElementById(pagrindinis_langelis_id).innerHTML = pagrindinis_langelis_backup_html;
@@ -388,37 +366,25 @@
 						document.getElementById(koordinates[i]).value = tikimybe;
 						document.getElementById(koordinates[i]).innerHTML = Math.round(tikimybe) + "%";
 
-					}else if(!pasirinkimo_taisymas){
-
-						if(kaimynas_html.split('%').length==2){
+					}
+					//Jei langelio verte nera tuscia, toliau tikrinama ar rasoma nauja reiksme, ar atliekamas taisymas atmetant reiksmes kurios be % zenklo html'e
+					else if(!pasirinkimo_taisymas && kaimynas_html.split('%').length==2){
 
 						let bendros_tikimybes = (tikimybe * kaimynas_val)/100;
 
 						document.getElementById(koordinates[i]).value = bendros_tikimybes;
 						document.getElementById(koordinates[i]).innerHTML = Math.round(bendros_tikimybes) + "%";
 
-						}
-
 					}else if(pasirinkimo_taisymas){
 
 						console.log ("Taisymas");
 
+						//let reverse = reverse_probability (pagrindinis_langelis_backup, antrinis_lengelis_id, kaimynas_val);
+						reverse = probability (0,0,kaimynas_val, pagrindinis_langelis_backup, antrinis_lengelis_id);
+						document.getElementById(koordinates[i]).value = reverse;
+						document.getElementById(koordinates[i]).innerHTML = Math.round(reverse) + "%";
+
 					}
-					
-
-					//jei tikimybes aplink pasirinkta langeli skaiciuoja pirma karta
-					/*else if (pasirinkimo_taisymas){
-
-						//pakeicia tikimybes aplinkiniu langeliu, jei pries tai buvo pasirinktas ne tas simbolis
-
-						document.getElementById(koordinates[i]).value = tikimybe;
-						document.getElementById(koordinates[i]).innerHTML = Math.round(tikimybe) + "%";
-
-					}else{
-
-						console.log("Klaida fn filling");				
-
-					}*/
 				}
 			}
 
@@ -434,13 +400,11 @@
 
 							document.getElementById(langeliai_koords [p] [s]).innerHTML = tmp + "%";
 
-						}/*else {
-							count_remaining--;
-						}*/
-
+						}
 					}
-				}//console.log(count_remaining);
+				}
 
+				console.log("Pabaiga");
 			}
 
 			let items = 3;
@@ -450,7 +414,7 @@
 
 				langeliai_koords [height] = [];
 
-				for (let length = 0; length < 13; length++){
+				for (let length = 0; length < columns; length++){
 
 					langeliai_koords [height] [length] = height + "|" + length;
 
@@ -459,7 +423,6 @@
 				}
 				count_remaining = count;
 			}
-			//console.table(langeliai_koords);
 			
 			procentai_total();
 				
