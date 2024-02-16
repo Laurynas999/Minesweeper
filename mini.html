@@ -128,19 +128,20 @@
 
 	<script>
 
-			const langeliai_koords = new Array();
+			const langeliai_info = new Array();
+
+			let pagrindinis_langelis_id;
+			let pagrindinis_langelis_value;
+
 			var pagrindinis_langelis_backup;
+
+			let antrinis_lengelis_id;
 			
 			let count = 0;
 			let count_remaining = 0;
 			let bomb_num = 10;
 
 			let pasirinkimo_taisymas;
-
-			let pagrindinis_langelis_id;
-			let pagrindinis_langelis_value;
-
-			let antrinis_lengelis_id;
 				
 			function updateButton(pasirinkto_langelio_verte,pasirinkto_langelio_id) {   //uzfiksuoja kuris langelis pasirinktas i var pasirinktas_langelis ir iskviecia pasirinkimus
 
@@ -214,7 +215,7 @@
 				let koord_y = koordinate[0];
 				let koord_x = koordinate[1];
 
-				let arr_y = kaimynai_plane(koord_y, items);
+				let arr_y = kaimynai_plane(koord_y, rows);
 
 				let arr_x = kaimynai_plane(koord_x, columns);
 
@@ -392,13 +393,13 @@
 
 				let tmp = (Math.round((bomb_num/count_remaining)*100));
 
-				for (let p = 0; p < items; p++){
+				for (let p = 0; p < rows; p++){
 
 					for (let s = 0; s < 13; s++){
 
-						if (document.getElementById(langeliai_koords [p] [s]).value == "?") {
+						if (document.getElementById(langeliai_info [p] [s]).value == "?") {
 
-							document.getElementById(langeliai_koords [p] [s]).innerHTML = tmp + "%";
+							document.getElementById(langeliai_info [p] [s]).innerHTML = tmp + "%";
 
 						}
 					}
@@ -407,21 +408,34 @@
 				console.log("Pabaiga");
 			}
 
-			let items = 3;
+			let rows = 3;
 			let columns = 13;
 
-			for (let height = 0; height < items; height++){  
+			const properties = {
 
-				langeliai_koords [height] = [];
+					x_axis : null,
+					y_axis : null,
+					verte : null,
+					kaimynai_vnt : null,
+					kaimynines_bombos_vnt : null,
+
+			};
+
+			for (let height = 0; height < rows; height++){  
 
 				for (let length = 0; length < columns; length++){
 
-					langeliai_koords [height] [length] = height + "|" + length;
+					langeliai_info [count] = Object.values(properties);
+
+					langeliai_info [count] [0] = height;
+					langeliai_info [count] [1] = length;
 
 					count++;
 					
 				}
+
 				count_remaining = count;
+
 			}
 			
 			procentai_total();
